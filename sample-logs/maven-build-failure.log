@@ -1,0 +1,2 @@
+[ERROR] Failed to execute goal on project demo: Could not resolve dependencies for project com.example:demo:jar:0.0.1-SNAPSHOT: Could not transfer artifact org.example:missing-lib:jar:9.9.9 from/to central (https://repo.maven.apache.org/maven2): Connect timed out
+[INFO] BUILD FAILURE

@@ -1,0 +1,5 @@
+2026-10-12 10:30:05.771 ERROR 4120 --- [nio-8080-exec-1] c.e.demo.UserController : Request failed
+Exception in thread "main" java.lang.NullPointerException: Cannot invoke "String.length()" because "name" is null
+    at com.example.demo.UserService.greet(UserService.java:42)
+    at com.example.demo.UserController.hello(UserController.java:18)
+    at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)

@@ -1,0 +1,7 @@
+2026-10-12 10:15:30.123 ERROR 4120 --- [           main] o.s.boot.SpringApplication : Application run failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory': Failed to initialize dependency 'flywayInitializer'
+Caused by: org.flywaydb.core.internal.exception.FlywaySqlException: Unable to obtain connection from database: FATAL: password authentication failed for user "demo_user"
+Caused by: org.postgresql.util.PSQLException: FATAL: password authentication failed for user "demo_user"
+    at org.postgresql.core.v3.ConnectionFactoryImpl.doAuthentication(ConnectionFactoryImpl.java:693)
+    at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:203)

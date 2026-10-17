@@ -1,0 +1,97 @@
+{
+  "info": {
+    "name": "FixFlow AI",
+    "description": "Requests for the FixFlow AI backend. Local dev uses port 8081; the Docker stack uses 8080 (change the baseUrl variable).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8081" },
+    { "key": "diagnosisId", "value": "" }
+  ],
+  "item": [
+    { "name": "Health", "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/health" } },
+    { "name": "Stats", "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/stats" } },
+    { "name": "Knowledge - list all", "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/knowledge" } },
+    { "name": "Knowledge - search", "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/knowledge?query=password" } },
+    {
+      "name": "Preview (sanitized, paste)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/v1/diagnoses/preview",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"content\": \"Caused by: org.postgresql.util.PSQLException: FATAL: password authentication failed for user demo_user\\nspring.datasource.password=NotARealPassword123\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Rule-based preview (nothing saved)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/v1/diagnoses/rule-based-preview",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"content\": \"java.lang.NullPointerException: Cannot invoke \\\"String.length()\\\" because \\\"name\\\" is null\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Analyze (paste) - saves diagnosisId",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('created', function () { pm.response.to.have.status(201); });",
+              "pm.collectionVariables.set('diagnosisId', pm.response.json().diagnosisId);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/v1/diagnoses",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Postgres login failure\",\n  \"content\": \"Caused by: org.postgresql.util.PSQLException: FATAL: password authentication failed for user demo_user\\nspring.datasource.password=NotARealPassword123\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Analyze (upload .log file)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/v1/diagnoses/upload",
+        "body": {
+          "mode": "formdata",
+          "formdata": [{ "key": "file", "type": "file", "src": "" }]
+        }
+      }
+    },
+    { "name": "History (page 0, size 10)", "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/diagnoses?page=0&size=10" } },
+    { "name": "Get diagnosis", "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/diagnoses/{{diagnosisId}}" } },
+    {
+      "name": "Send feedback",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/v1/diagnoses/{{diagnosisId}}/feedback",
+        "body": { "mode": "raw", "raw": "{\n  \"rating\": \"HELPFUL\",\n  \"comment\": \"Worked well\"\n}" }
+      }
+    },
+    { "name": "Delete diagnosis", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/v1/diagnoses/{{diagnosisId}}" } },
+    {
+      "name": "Error example - empty content (expects 400)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/v1/diagnoses",
+        "body": { "mode": "raw", "raw": "{\n  \"content\": \"\"\n}" }
+      }
+    }
+  ]
+}
