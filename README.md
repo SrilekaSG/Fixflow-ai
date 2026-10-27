@@ -2,7 +2,7 @@
 
 An AI-assisted troubleshooting tool for Java / Spring Boot errors. Paste an error message or upload a `.log` / `.txt` file, and FixFlow masks likely secrets, parses the stack trace, searches a built-in knowledge base, and produces a structured diagnosis with evidence, ordered debugging steps, and verification steps. It works without an AI key (rule-based mode) and can use any OpenAI-compatible LLM API when configured.
 
-> **Local single-user demo.** There is no authentication. Do not expose it publicly without adding access controls and rate limiting.
+
 
 ## How it works
 
